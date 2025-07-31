@@ -11,7 +11,6 @@ export default function FlyerTrackerApp() {
 
 
   const getLocation = () => {
-    // Get user's current location
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setLatitude(position.coords.latitude);
@@ -35,15 +34,74 @@ export default function FlyerTrackerApp() {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const objectUrl = URL.createObjectURL(file);
-      setImageUrl(objectUrl);
-      setCaptureTime(new Date()); // Set capture time
-      getLocation();
+  // const handleFileChange = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const objectUrl = URL.createObjectURL(file);
+  //     setImageUrl(objectUrl);
+  //     setCaptureTime(new Date()); // Set capture time
+  //     getLocation();
+ 
+  //   }
+  // };
+
+  const handleFileChange = async (event) => {
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  const objectUrl = URL.createObjectURL(file);
+  setImageUrl(objectUrl);
+  setCaptureTime(new Date());
+  getLocation();
+
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    try {
+
+      const cloudinaryUrl = 'https://api.cloudinary.com/v1_1/doj0vye62/image/upload';
+      const cloudinaryUploadPreset = 'Qoute_FileName';
+
+      const cloudData = new FormData();
+      cloudData.append('file', file);
+      cloudData.append('upload_preset', cloudinaryUploadPreset);
+
+      const cloudinaryResponse = await fetch(cloudinaryUrl, {
+        method: 'POST',
+        body: cloudData,
+      });
+
+      const cloudinaryResult = await cloudinaryResponse.json();
+
+      const imageUrl = cloudinaryResult.secure_url;
+      console.log('Image uploaded to Cloudinary:', imageUrl);
+
+  
+      const webhookData = new FormData();
+      webhookData.append('image_url', imageUrl);
+      webhookData.append('latitude', latitude);
+      webhookData.append('longitude', longitude);
+
+
+      const webhookUrl = 'https://hook.us2.make.com/q8ovvnztkqwrymqbppbfoyb4xseq54hk';
+      const webhookResponse = await fetch(webhookUrl, {
+        method: 'POST',
+        body: webhookData,
+      });
+
+      if (!webhookResponse.ok) throw new Error('Webhook failed');
+      console.log('Data sent to webhook successfully');
+
+    } catch (error) {
+      console.error('Error:', error);
     }
-  };
+
+  }, (error) => {
+    console.error('Geolocation error:', error);
+  });
+};
 
   const formatDateTime = (date) => {
     return date.toLocaleString('en-GB', {

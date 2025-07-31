@@ -47,55 +47,58 @@ export default function LoginPage({ onLogin = () => {} }) {
   }, []);
 
   return (
-    <div style={styles.wrapper}>
-      <div style={styles.innerContainer}>
-        <div style={styles.leftColumn}>
-          <img
-            src="Image/MainLogo1.jpg" 
-            alt="Logo"
-            style={styles.logo}
-          />
-        </div>
-        <div style={styles.card}>
-          <h2 style={styles.title}>Login</h2>
-          <form onSubmit={handleLogin} style={styles.form}>
-            <input
-              type="email"
-              placeholder="Email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={styles.input}
-            />
-            <div style={{ position: 'relative' }}>
-              <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={styles.input}
-              />
-              <div style={styles.eyeIcon} onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <EyeIcon /> : <EyeOffIcon />}
-              </div>
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                ...styles.button,
-                opacity: loading ? 0.6 : 1,
-                cursor: loading ? 'not-allowed' : 'pointer',
-              }}
-            >
-              {loading ? 'Logging in...' : 'Login'}
-            </button>
-            {error && <p style={styles.error}>{error}</p>}
-          </form>
-        </div>
-      </div>
+   <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 p-4">
+  <div className="flex flex-col md:flex-row w-full max-w-5xl rounded-2xl overflow-hidden shadow-2xl bg-white/20 backdrop-blur-lg animate-fadeSlide">
+    
+    <div className="flex justify-center items-center p-8 md:w-1/2 w-full bg-white/10">
+      <img
+        src="Image/MainLogo1.jpg"
+        alt="Logo"
+        className="w-full h-auto"
+      />
     </div>
+    <div className="flex flex-col justify-center text-white p-8 md:w-1/2 w-full">
+      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+      <form onSubmit={handleLogin} className="flex flex-col gap-4">
+        <input
+          type="email"
+          placeholder="Email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="p-3 rounded-lg bg-white/20 backdrop-blur-sm text-white placeholder-white/70 outline-none focus:ring-2 focus:ring-white transition"
+        />
+        <div className="relative">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="p-3 rounded-lg bg-white/20 backdrop-blur-sm text-white placeholder-white/70 outline-none focus:ring-2 focus:ring-white transition w-full"
+          />
+          <div
+            className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeIcon /> : <EyeOffIcon />}
+          </div>
+        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className={`p-3 rounded-lg font-bold text-white bg-indigo-700 hover:bg-indigo-800 transition ${
+            loading ? 'opacity-60 cursor-not-allowed' : ''
+          }`}
+        >
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
+        {error && <p className="text-red-300 text-sm text-center">{error}</p>}
+      </form>
+    </div>
+  </div>
+</div>
+
   );
 }
 
@@ -115,92 +118,92 @@ function EyeOffIcon() {
   );
 }
 
-const styles = {
-  wrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    background: 'linear-gradient(135deg, #667eea, #764ba2)',
-    padding: '1rem',
-  },
-  innerContainer: {
-    display: 'flex',
-    width: '90%',
-    maxWidth: '900px',
-    borderRadius: '16px',
-    overflow: 'hidden',
-    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.2)',
-    animation: 'fadeSlide 0.6s ease forwards',
-    backgroundColor: '#ffffff20',
-    backdropFilter: 'blur(12px)',
-  },
-  leftColumn: {
-    flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '2rem',
-  },
-  logo: {
-    width: '100%',
-    maxWidth: '100%',
-    height: 'auto',
-  },
-  card: {
-    flex: 1,
-    padding: '2rem',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    color: '#fff',
-  },
-  title: {
-    fontSize: '26px',
-    fontWeight: 'bold',
-    marginBottom: '1.5rem',
-    textAlign: 'center',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
-  },
-  input: {
-    padding: '12px 14px',
-    borderRadius: '8px',
-    border: 'none',
-    outline: 'none',
-    fontSize: '16px',
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    color: '#fff',
-    backdropFilter: 'blur(4px)',
-    transition: '0.3s',
-    width: '100%',
-  },
-  eyeIcon: {
-    position: 'absolute',
-    top: '50%',
-    right: '14px',
-    transform: 'translateY(-50%)',
-    cursor: 'pointer',
-    fontSize: '18px',
-  },
-  button: {
-    padding: '12px',
-    backgroundColor: '#4c51bf',
-    border: 'none',
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: '16px',
-    borderRadius: '8px',
-    transition: 'background-color 0.3s',
-  },
-  error: {
-    color: 'salmon',
-    fontSize: '14px',
-    marginTop: '0.5rem',
-    textAlign: 'center',
-  },
-};
+// const styles = {
+//   wrapper: {
+//     display: 'flex',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     height: '100vh',
+//     background: 'linear-gradient(135deg, #667eea, #764ba2)',
+//     padding: '1rem',
+//   },
+//   innerContainer: {
+//     display: 'flex',
+//     width: '90%',
+//     maxWidth: '900px',
+//     borderRadius: '16px',
+//     overflow: 'hidden',
+//     boxShadow: '0 20px 40px rgba(0, 0, 0, 0.2)',
+//     animation: 'fadeSlide 0.6s ease forwards',
+//     backgroundColor: '#ffffff20',
+//     backdropFilter: 'blur(12px)',
+//   },
+//   leftColumn: {
+//     flex: 1,
+//     backgroundColor: 'rgba(255,255,255,0.1)',
+//     display: 'flex',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     padding: '2rem',
+//   },
+//   logo: {
+//     width: '100%',
+//     maxWidth: '100%',
+//     height: 'auto',
+//   },
+//   card: {
+//     flex: 1,
+//     padding: '2rem',
+//     display: 'flex',
+//     flexDirection: 'column',
+//     justifyContent: 'center',
+//     color: '#fff',
+//   },
+//   title: {
+//     fontSize: '26px',
+//     fontWeight: 'bold',
+//     marginBottom: '1.5rem',
+//     textAlign: 'center',
+//   },
+//   form: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//     gap: '1rem',
+//   },
+//   input: {
+//     padding: '12px 14px',
+//     borderRadius: '8px',
+//     border: 'none',
+//     outline: 'none',
+//     fontSize: '16px',
+//     backgroundColor: 'rgba(255,255,255,0.2)',
+//     color: '#fff',
+//     backdropFilter: 'blur(4px)',
+//     transition: '0.3s',
+//     width: '100%',
+//   },
+//   eyeIcon: {
+//     position: 'absolute',
+//     top: '50%',
+//     right: '14px',
+//     transform: 'translateY(-50%)',
+//     cursor: 'pointer',
+//     fontSize: '18px',
+//   },
+//   button: {
+//     padding: '12px',
+//     backgroundColor: '#4c51bf',
+//     border: 'none',
+//     color: '#fff',
+//     fontWeight: 'bold',
+//     fontSize: '16px',
+//     borderRadius: '8px',
+//     transition: 'background-color 0.3s',
+//   },
+//   error: {
+//     color: 'salmon',
+//     fontSize: '14px',
+//     marginTop: '0.5rem',
+//     textAlign: 'center',
+//   },
+// };
