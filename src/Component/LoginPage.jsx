@@ -49,16 +49,13 @@ export default function LoginPage({ onLogin = () => {} }) {
   return (
     <div style={styles.wrapper}>
       <div style={styles.innerContainer}>
-        {/* Left Column with Logo */}
         <div style={styles.leftColumn}>
           <img
-            src="Image/MainLogo1.jpg" // Replace with your logo path
+            src="Image/MainLogo1.jpg" 
             alt="Logo"
             style={styles.logo}
           />
         </div>
-
-        {/* Right Column Login Form */}
         <div style={styles.card}>
           <h2 style={styles.title}>Login</h2>
           <form onSubmit={handleLogin} style={styles.form}>
