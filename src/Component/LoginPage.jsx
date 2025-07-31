@@ -28,23 +28,27 @@ export default function LoginPage({ onLogin = () => {} }) {
     }
   };
 
-  useEffect(() => {
-    const sheet = document.styleSheets[0];
-    if (sheet) {
-      sheet.insertRule(`
-        @keyframes fadeSlide {
-          0% {
-            opacity: 0;
-            transform: scale(0.95) translateY(20px);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-      `, sheet.cssRules.length);
+useEffect(() => {
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `
+    @keyframes fadeSlide {
+      0% {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
-  }, []);
+
+    .animate-fadeSlide {
+      animation: fadeSlide 0.6s ease forwards;
+    }
+  `;
+  document.head.appendChild(styleEl);
+}, []);
+
 
   return (
    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 p-4">
