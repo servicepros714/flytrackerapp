@@ -85,11 +85,21 @@ export default function FlyerTrackerApp() {
       webhookData.append('latitude', latitude);
       webhookData.append('longitude', longitude);
 
+      const records = {
+        image: imageUrl,
+        type: selected,
+        latitude: latitude,
+        longitude: longitude
+
+      }
+
+      console.log("the records",records);
+
 
       const webhookUrl = 'https://hook.us2.make.com/q8ovvnztkqwrymqbppbfoyb4xseq54hk';
       const webhookResponse = await fetch(webhookUrl, {
         method: 'POST',
-        body: webhookData,
+        body: records,
       });
 
       if (!webhookResponse.ok) throw new Error('Webhook failed');
