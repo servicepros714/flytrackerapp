@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { CiCamera, CiCircleCheck } from "react-icons/ci";
 import { FaRegCircle } from "react-icons/fa";
-import { removeToken } from '../auth/Auth';
+import { removeToken,getToken } from '../auth/Auth';
 
 export default function FlyerTrackerApp() {
   const [latitude, setLatitude] = useState(null);
@@ -89,7 +89,8 @@ export default function FlyerTrackerApp() {
         image: imageUrl,
         type: selected,
         latitude: latitude,
-        longitude: longitude
+        longitude: longitude,
+        recordId:getToken().ID
 
       }
  const recordsArray = [records]; 
