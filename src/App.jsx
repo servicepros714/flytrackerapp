@@ -1,15 +1,62 @@
 // src/App.jsx
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './Component/LoginPage';
 import FileTrackerApp from './Component/FileTrackerApp';
 import Dashboard from './Admin/dashboard';
+import { getToken } from './auth/Auth';
+
+function RequireAuth({ children, adminOnly = false }) {
+  const tokenData = getToken();
+
+  if (!tokenData) {
+    return <Navigate to="/" replace />;
+  }
+
+  const isAdmin = tokenData.UserType === 'Admin';
+
+  if (adminOnly && !isAdmin) {
+    return <Navigate to="/file-tracker" replace />;
+  }
+
+  return children;
+}
+
+
+function RedirectIfLoggedIn() {
+  const tokenData = getToken();
+
+  if (tokenData) {
+    return tokenData.UserType === 'Admin'
+      ? <Navigate to="/admin-dashboard" replace />
+      : <Navigate to="/file-tracker" replace />;
+  }
+
+  return <LoginPage />;
+}
+
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/file-tracker" element={<FileTrackerApp />} />
-         <Route path="/admin-dashboard" element={<Dashboard />} />
+        <Route path="/" element={<RedirectIfLoggedIn />} />
+
+        <Route
+          path="/file-tracker"
+          element={
+            <RequireAuth>
+              <FileTrackerApp />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/admin-dashboard"
+          element={
+            <RequireAuth adminOnly={true}>
+              <Dashboard />
+            </RequireAuth>
+          }
+        />
       </Routes>
     </Router>
   );

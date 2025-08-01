@@ -2,47 +2,72 @@ import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { saveToken } from '../auth/Auth';
 
-export default function LoginPage({ onLogin = () => {} }) {
+export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const isAdmin = true;
+  const isAdmin = false;
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-try {
-  // const payload = { email, password };
-  const payload = { UserName: email, Password: password };
-  const response = await fetch('https://hook.us2.make.com/a3j75nc4ieo5p9b3m35ntsm3eifvuyet', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-  const data = await response.text(); 
+  try {
+    const payload = { UserName: email, Password: password };
 
-  console.log('The response:', data);
+    const response = await fetch('https://hook.us2.make.com/a3j75nc4ieo5p9b3m35ntsm3eifvuyet', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
 
-  if (data !== "Not Found") {
-    onLogin(); 
+    const contentType = response.headers.get('content-type');
+    let data;
+
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+
+      if (text.trim() === 'Not Found') {
+        throw new Error('User not found');
+      }
+
+      try {
+        const fixedText = text
+          .replace(/(\w+):/g, '"$1":') 
+          .replace(/: ([^"{\[\]\},\n]+)/g, ': "$1"');
+        data = JSON.parse(fixedText);
+      } catch (fixErr) {
+        throw new Error('Invalid response format');
+      }
+    }
+
+    if (!data || typeof data !== 'object') {
+      throw new Error('Invalid login response');
+    }
+
     saveToken(data);
-   navigate(isAdmin ? '/admin-dashboard' : '/file-tracker');
-  } else {
-    throw new Error('User not found');
+console.log("the data",data.UserType)
+    if (data.UserType === 'Admin') {
+      navigate('/admin-dashboard');
+    }else{
+      navigate('/file-tracker');
+    }
+
+  } catch (err) {
+    console.error('Login error:', err);
+    setError(err.message || 'Login failed. Please check your credentials.');
+  } finally {
+    setLoading(false);
   }
-} catch (err) {
-  setError('Login failed. Please check your credentials.');
-} finally {
-  setLoading(false);
-}
+};
 
 
-  };
 
 useEffect(() => {
   const styleEl = document.createElement('style');

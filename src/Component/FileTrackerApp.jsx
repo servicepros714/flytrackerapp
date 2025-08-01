@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { CiCamera, CiCircleCheck } from "react-icons/ci";
 import { FaRegCircle } from "react-icons/fa";
+import { removeToken } from '../auth/Auth';
 
 export default function FlyerTrackerApp() {
   const [latitude, setLatitude] = useState(null);
@@ -114,9 +115,21 @@ export default function FlyerTrackerApp() {
       hour12: true,
     });
   };
+  const handleLogout =() =>{
+    removeToken();
+    window.location.href = '/';
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center pt-12 bg-gray-50">
+        <div className="absolute top-4 right-4">
+      <button
+        onClick={handleLogout}
+        className="bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded"
+      >
+        Logout
+      </button>
+    </div>
       <h1 className="text-5xl font-semibold text-blue-950 mb-4">
         Welcome to Flyer Tracker App
       </h1>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { saveToken,removeToken } from '../auth/Auth';
 
 const Dashboard = () => {
   const [data] = useState([
@@ -20,10 +21,10 @@ const Dashboard = () => {
 
   const headers = ['ID', 'Name', 'Email', 'Role', 'Status'];
 
-  const handleLogout = () => {
-
-    alert('Logged out!');
-  };
+const handleLogout = () => {
+ removeToken();
+  window.location.href = '/'; // force redirect to login
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 text-black p-6 transition-all duration-700 ease-in-out relative">
