@@ -93,13 +93,10 @@ export default function FlyerTrackerApp() {
 
       }
 
-      console.log("the records",records);
-
-
       const webhookUrl = 'https://hook.us2.make.com/q8ovvnztkqwrymqbppbfoyb4xseq54hk';
       const webhookResponse = await fetch(webhookUrl, {
         method: 'POST',
-        body: records,
+        body: JSON.stringify(records),
       });
 
       if (!webhookResponse.ok) throw new Error('Webhook failed');
