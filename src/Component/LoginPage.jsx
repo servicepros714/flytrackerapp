@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { saveToken } from '../auth/Auth';
 
 export default function LoginPage({ onLogin = () => {} }) {
   const [email, setEmail] = useState('');
@@ -6,26 +8,40 @@ export default function LoginPage({ onLogin = () => {} }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const isAdmin = true;
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    try {
-      const payload = { email, password };
-      const response = await fetch('https://hook.us2.make.com/a3j75nc4ieo5p9b3m35ntsm3eifvuyet', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+try {
+  // const payload = { email, password };
+  const payload = { UserName: email, Password: password };
+  const response = await fetch('https://hook.us2.make.com/a3j75nc4ieo5p9b3m35ntsm3eifvuyet', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
 
-      if (!response.ok) throw new Error('Failed to login');
-      onLogin();
-    } catch (err) {
-      setError('Login failed. Please check your credentials.');
-    } finally {
-      setLoading(false);
-    }
+  const data = await response.text(); 
+
+  console.log('The response:', data);
+
+  if (data !== "Not Found") {
+    onLogin(); 
+    saveToken(data);
+   navigate(isAdmin ? '/admin-dashboard' : '/file-tracker');
+  } else {
+    throw new Error('User not found');
+  }
+} catch (err) {
+  setError('Login failed. Please check your credentials.');
+} finally {
+  setLoading(false);
+}
+
+
   };
 
 useEffect(() => {
