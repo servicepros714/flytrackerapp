@@ -53,8 +53,10 @@ const handleLogin = async (e) => {
 
     saveToken(data);
 console.log("the data",data.UserType)
-    if (data.UserType === 'Admin') {
+    if (data.UserType === 'Admin' ) {
       navigate('/admin-dashboard');
+    }else if (data.UserType ==='User' && data.Status ==='Pending'){
+      navigate('/change-password');
     }else{
       navigate('/file-tracker');
     }
