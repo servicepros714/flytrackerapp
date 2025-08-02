@@ -21,6 +21,7 @@ export default function ChangePasswordPage() {
           CurrentStatus: getToken().Status,
           UserName: getToken().UserName
         };
+        console.log("record",payload)
       const response = await fetch('https://hook.us2.make.com/n39rb674hsrneimft9p5ibarjs4h4qwa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
