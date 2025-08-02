@@ -31,7 +31,7 @@ export default function ChangePasswordPage() {
 
       setNewPassword('');
       saveToken({ ...getToken(), Status: 'Active' });
-      navigate('/file-tracker');
+       navigate('/file-tracker', { replace: true });
     } catch (err) {
       console.error('Change password error:', err);
       setError(err.message || 'Something went wrong.');

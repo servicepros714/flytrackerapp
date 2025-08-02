@@ -25,6 +25,10 @@ function RequireAuth({ children, adminOnly = false, userOnly = false }) {
     return <Navigate to="/" replace />;
   }
 
+  if (window.location.pathname === '/change-password' && tokenData.Status === 'Active') {
+  return <Navigate to="/file-tracker" replace />;
+}
+
   return children;
 }
 
