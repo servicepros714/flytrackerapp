@@ -147,41 +147,6 @@ const webhookResponse = await fetch(webhookUrl, {
         Welcome to Flyer Tracker App
       </h1>
 
-     {/* <div className="flex gap-4 mt-5 mb-7">
-      {options.map(({ value, label }) => {
-        const isActive = selected === value;
-
-        return (
-          <button
-            key={value}
-            onClick={() => setSelected(value)}
-            type="button"
-            className={`
-              flex items-center gap-2 px-4 py-2 rounded-md border 
-              transition-colors duration-200
-              ${isActive ? 'bg-blue-600 text-white' : 'bg-white text-blue-600'}
-              border-blue-200 cursor-pointer 
-            `}
-          >
-            {isActive && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            )}
-            <span className="font-medium">{label}</span>
-          </button>
-        );
-      })}
-    </div> */}
      <div className="flex gap-6 items-center mb-8">
       {/* Flyers Button */}
       <button
