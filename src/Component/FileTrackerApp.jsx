@@ -35,16 +35,7 @@ export default function FlyerTrackerApp() {
     fileInputRef.current.click();
   };
 
-  // const handleFileChange = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const objectUrl = URL.createObjectURL(file);
-  //     setImageUrl(objectUrl);
-  //     setCaptureTime(new Date()); // Set capture time
-  //     getLocation();
- 
-  //   }
-  // };
+
 
   const handleFileChange = async (event) => {
   const file = event.target.files[0];
@@ -148,7 +139,7 @@ const webhookResponse = await fetch(webhookUrl, {
       </h1>
 
      <div className="flex gap-6 items-center mb-8">
-      {/* Flyers Button */}
+ 
       <button
         onClick={() => setSelected('Flyers')}
         className={`flex items-center gap-2 px-6 py-3 rounded-md font-medium transition-all duration-150 ${
@@ -158,14 +149,14 @@ const webhookResponse = await fetch(webhookUrl, {
         }`}
       >
         {selected === 'Flyers' ? (
-          <CiCircleCheck size={20} /> // Filled circle when active
+          <CiCircleCheck size={20} /> 
         ) : (
-          <FaRegCircle size={20} /> // Empty circle when inactive
+          <FaRegCircle size={20} /> 
         )}
         Flyers
       </button>
 
-      {/* Signs Button */}
+
       <button
         onClick={() => setSelected('Signs')}
         className={`flex items-center gap-2 px-6 py-3 rounded-md font-medium transition-all duration-150 ${
@@ -175,9 +166,9 @@ const webhookResponse = await fetch(webhookUrl, {
         }`}
       >
         {selected === 'Signs' ? (
-          <CiCircleCheck size={20} /> // Filled circle when active
+          <CiCircleCheck size={20} /> 
         ) : (
-          <FaRegCircle size={20} /> // Empty circle when inactive
+          <FaRegCircle size={20} /> 
         )}
         Signs
       </button>
@@ -191,7 +182,7 @@ const webhookResponse = await fetch(webhookUrl, {
         <p className="text-blue-950 font-semibold text-lg">Click here to capture!</p>
       </div>
 
-       {/* Hidden File Input */}
+   
       <input
         type="file"
         accept="image/*"
@@ -226,20 +217,7 @@ const webhookResponse = await fetch(webhookUrl, {
       </div>
     )}
 
-      {/* <button
-        onClick={getLocation}
-        className="bg-blue-600 text-white px-4 py-2 rounded-full mb-4 hover:bg-blue-700"
-      >
-        Get Current Location
-      </button> */}
 
-{/* 
-      {latitude && longitude && (
-        <div className="text-left mb-4">
-          <p className="text-gray-700">Latitude: {latitude}</p>
-          <p className="text-gray-700">Longitude: {longitude}</p>
-        </div>
-      )} */}
 
       {error && (
         <p className="text-red-600 mb-4" style={{ color: 'red' }}>
