@@ -9,6 +9,7 @@ export default function FlyerTrackerApp() {
   const [longitude, setLongitude] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [totalCount,setTotalCount] = useState(0);
 
 
   const getLocation = () => {
@@ -99,6 +100,29 @@ const webhookResponse = await fetch(webhookUrl, {
       if (!webhookResponse.ok) throw new Error('Webhook failed');
       console.log('Data sent to webhook successfully');
 
+    const userName = getToken()?.UserName || '';
+    const selectedType = selected || '';
+
+    const formula = `AND({UserName}='${userName}', {Type}='${selectedType}', IS_SAME(CREATED_TIME(), TODAY(), 'day'))`;
+
+    const totalCountResponse = await fetch(
+      `https://api.airtable.com/v0/appUbFQNnqLyAE91b/tbldM9CuFapFApSCe?filterByFormula=${encodeURIComponent(formula)}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer patOqbvQBRYKN0N9t.ad5d76ed48b85d7a6ba0d090b6e3cfbe27df9e12d40d7cbcc0995c9b3d51a86b`, 
+        },
+      }
+    );
+
+    if (!totalCountResponse.ok) {
+      throw new Error(`Airtable fetch failed: ${totalCountResponse.status} ${totalCountResponse.statusText}`);
+    }
+
+    const airtableData = await totalCountResponse.json();
+    setTotalCount(airtableData.records.length)
+    console.log("the totla",airtableData)
+
     } catch (error) {
       console.error('Error:', error);
     }
@@ -127,6 +151,7 @@ const webhookResponse = await fetch(webhookUrl, {
   return (
     <div className="min-h-screen flex flex-col items-center pt-12 bg-gray-50">
         <div className="absolute top-4 right-4">
+
       <button
         onClick={handleLogout}
         className="bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded"
@@ -172,6 +197,7 @@ const webhookResponse = await fetch(webhookUrl, {
         )}
         Signs
       </button>
+      
     </div>
 
       
@@ -181,7 +207,6 @@ const webhookResponse = await fetch(webhookUrl, {
         <CiCamera className="text-blue-400 text-6xl mb-2" />
         <p className="text-blue-950 font-semibold text-lg">Click here to capture!</p>
       </div>
-
    
       <input
         type="file"
@@ -194,7 +219,7 @@ const webhookResponse = await fetch(webhookUrl, {
       {imageUrl && (
       <div className="mt-10 w-full bg-indigo-100 p-8 rounded-xl shadow-md flex flex-col items-center">
         <p className="text-lg text-blue-900 font-medium mb-4 text-center">
-          Congratulations, you've captured <span className="font-bold text-blue-700">1</span> {selected.toLowerCase()} today.<br />
+          Congratulations, you've captured <span className="font-bold text-blue-700">{totalCount}</span> {selected.toLowerCase()} today.<br />
           You can do it, capture more on flyer-tracker.
         </p>
 
@@ -214,10 +239,9 @@ const webhookResponse = await fetch(webhookUrl, {
         <button className="bg-white text-blue-800 font-semibold py-2 px-6 rounded-md shadow hover:bg-gray-100">
           {selected}
         </button>
+       
       </div>
     )}
-
-
 
       {error && (
         <p className="text-red-600 mb-4" style={{ color: 'red' }}>
